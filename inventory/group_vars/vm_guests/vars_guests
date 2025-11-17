@@ -9,5 +9,5 @@ max_parallel_downloads: 5
 
 # package operations
 install_packages: false
-update_host: true
+update_host: false
 clean_subscription: false

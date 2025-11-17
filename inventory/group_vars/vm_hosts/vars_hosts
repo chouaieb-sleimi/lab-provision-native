@@ -20,27 +20,12 @@ root_pass: "root"
 domain: "ansible.labs.homestation"
 vm_list:
   - {
-      vm_name: "control_rhel8.7",
+      vm_name: "control-alma9.1",
       hostname: "control",
-      base_image_name: "rhel-8.7-x86_64-kvm.qcow2",
+      base_image_name: "AlmaLinux-9-GenericCloud-9.1-20221118.x86_64.qcow2",
     }
   - {
-      vm_name: "managed-1_alma8.7",
+      vm_name: "managed_1-alma9.1",
       hostname: "managed1",
-      base_image_name: "AlmaLinux-8-GenericCloud-8.7-20221111.x86_64.qcow2",
-    }
-  - {
-      vm_name: "managed-2_alma8.7",
-      hostname: "managed2",
-      base_image_name: "AlmaLinux-8-GenericCloud-8.7-20221111.x86_64.qcow2",
-    }
-  - {
-      vm_name: "managed-3_alma8.7",
-      hostname: "managed3",
-      base_image_name: "AlmaLinux-8-GenericCloud-8.7-20221111.x86_64.qcow2",
-    }
-  - {
-      vm_name: "managed-4_alma8.7",
-      hostname: "managed4",
-      base_image_name: "AlmaLinux-8-GenericCloud-8.7-20221111.x86_64.qcow2",
+      base_image_name: "AlmaLinux-9-GenericCloud-9.1-20221118.x86_64.qcow2",
     }
