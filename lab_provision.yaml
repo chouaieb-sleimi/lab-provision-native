@@ -6,7 +6,7 @@
   tasks:
     - name: Include role kvm_provision
       ansible.builtin.include_role:
-        name: kvm_provision
+        name: ansible-role-provision-kvm-native
       vars:
         vm_name: "{{ item.vm_name }}"
         hostname: "{{ item.hostname }}"
@@ -27,5 +27,5 @@
   tasks:
     - name: Include role host_configure
       ansible.builtin.include_role:
-        name: host_configure
+        name: ansible-role-configure-hosts
       when: configure_hosts != "False"

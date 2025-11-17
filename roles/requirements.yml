@@ -1,0 +1,9 @@
+- name: ansible-role-configure-hosts
+  scm: git
+  src: https://github.com/chouaieb-sleimi/ansible-role-configure-hosts.git
+  version: main
+
+- name: ansible-role-provision-kvm-native
+  scm: git
+  src: https://github.com/chouaieb-sleimi/ansible-role-provision-kvm-native.git
+  version: main
