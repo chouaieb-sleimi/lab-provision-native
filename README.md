@@ -2,56 +2,76 @@
 
 ## Description
 
-**lab_provision** is an Ansible project that provisions and configures virtual machines on RHEL-like hosts using the KVM hyperviser.
+**lab_provision** is an Ansible project that provisions and configures virtual machines on RHEL-like hosts using the KVM hypervisor.
 
-This project is heavily enspired from the [Build a lab in 36 seconds with Ansible](https://www.redhat.com/sysadmin/build-VM-fast-ansible) article by _Ricardo Gerardi_ which is based on the [Build a lab in five minutes with three simple commands](https://www.redhat.com/sysadmin/build-lab-quickly) article from Alex Callejas; Reading these projects is recommended to see the evolution tof the concept.
+**Credits:**
+This project is heavily inspired from the [Build a lab in 36 seconds with Ansible](https://www.redhat.com/sysadmin/build-VM-fast-ansible) article by _Ricardo Gerardi_ which itself is based on the [Build a lab in five minutes with three simple commands](https://www.redhat.com/sysadmin/build-lab-quickly) article from _Alex Callejas_;
+Reading these articles is recommended to see the evolution of the concept.
+
+---
 
 ## Project Structure
 
-This project is divided to two main parts, which are in turn represented in the 2 Ansible roles
+This project's features are divided into two main parts, represented by 2 Ansible roles:
 
-- **kvm_provision**
-- **host_configure**
+- **ansible-role-provision-kvm** - VM provisioning
+- **ansible-role-configure-hosts** - Post-provisioning configuration
+
+## Quick Setup
+
+1. **Clone the repository:**
+
+   ```bash
+   git clone https://github.com/chouaieb-sleimi/lab_provision.git
+   cd lab_provision
+   ```
+
+2. **Install the roles:**
+
+   ```bash
+   ansible-galaxy role install -r roles/requirements.yaml -p roles/
+   ```
+
+3. **Configure variables:** Edit `lab_vars.yaml` with your VM specifications
+
+4. **Configure inventory:**
+
+   ```ini
+   [vm_hosts]
+   localhost ansible_connection=local
+   ```
+
+5. **Launch the playbook:**
+
+   ```bash
+   ansible-playbook -i inventory/inventory --ask-become-pass lab_provision.yaml
+   ```
 
 ---
 
-### kvm_provision
+## Roles
 
-This role provisions the guest vms defined in the variable `vm_list` and ensures the most basic guest connectivity steps.
+### ansible-role-provision-kvm
 
-**Role features:**
+Provisions guest VMs defined in `vm_list` and ensures basic connectivity.
+Role repository: [chouaieb-sleimi/ansible-role-provision-kvm-native](https://github.com/chouaieb-sleimi/ansible-role-provision-kvm-native)
 
-- Provision vm guests
-- Adds provisioned vms hostnames to host's `/etc/hosts` file
-- Update `known_hosts` file (to avoid ssh key fingerprint connection errors)
+**Features:**
 
-**Role variables:**
+- Provision VM guests using libvirt
+- Add VM hostnames to host's `/etc/hosts` file
+- Update `known_hosts` file (avoids SSH fingerprint errors)
 
-- `iventory/vm_hosts/vars/vm_guests/*`
-- `roles/kvm_provision/defaults/main.yml`
+**Variables:** See `lab_vars.yaml` for all configuration options
 
----
+### ansible-role-configure-hosts
 
-### host_configure
+Performs post-provisioning configuration on VM guests. Most steps can be disabled via boolean variables.
+Role repository: [chouaieb-sleimi/ansible-role-configure-hosts](https://github.com/chouaieb-sleimi/ansible-role-configure-hosts)
 
-This role performs post-provisioning configuration in vm guests. Please note that most of these steps can be disabled via boolean variables.
+**Features:**
 
-**Role features:**
+- **Basic configuration:** SSH keys, keyboard layout, hosts file, aliases
+- **Package management:** DNF configuration, RHEL subscriptions, package installation, system updates
 
-- **Basic configuration:**
-  - send host's ssh key
-  - set keyboard layout
-  - send host's `/etc/hosts` file
-  - configure host's command alias in guests
-- **Package configuration:**
-  - configure dnf
-  - configure redhat subscription if provisioned guests are running RHEL
-  - install packages defined in the `packages` variable
-  - Update host
-  - Clean obsolete packages
-  - Remove RHEL subscription
-
-**Role variables:**
-
-- `iventory/vm_guests/vars/vm_guests/vars`
-- `roles/host_configure/defaults/main.yml`
+**Variables:** See `lab_vars.yaml` for all configuration options

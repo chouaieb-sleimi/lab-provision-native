@@ -2,18 +2,21 @@
 - name: Provision vms lab
   hosts: vm_hosts
   become: true
+  vars_files:
+    - lab_vars.yaml
+  vars: "{{ host_vars }}"
 
   tasks:
     - name: Include role kvm_provision
       ansible.builtin.include_role:
-        name: kvm_provision
+        name: ansible-role-provision-kvm
       vars:
         vm_name: "{{ item.vm_name }}"
         hostname: "{{ item.hostname }}"
         base_image_name: "{{ item.base_image_name }}"
       loop: "{{ vm_list }}"
 
-    - name: Add vm hostname to vm_guests group
+    - name: Add vm hostname to vm_guests ansible group
       ansible.builtin.add_host:
         host: "{{ item.hostname }}"
         group: vm_guests
@@ -23,9 +26,12 @@
 - name: Configure vm
   hosts: vm_guests
   remote_user: root
+  vars_files:
+    - lab_vars.yaml
+  vars: "{{ guest_vars }}"
 
   tasks:
     - name: Include role host_configure
       ansible.builtin.include_role:
-        name: host_configure
-      when: configure_hosts != "False"
+        name: ansible-role-configure-hosts
+      when: configure_hosts
